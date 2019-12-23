@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Pie Chart</title>
+    <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-base.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+    <div id="container"></div>
+    <script>
+        var chart;
+        var data = [
+            {"x": 2015, "value": 200, "drillDown": [
+                {"x": "Q1", "value": 12},
+                {"x": "Q2", "value": 34},
+                {"x": "Q3", "value": 23},
+                {"x": "Q4", "value": 76}
+            ]},
+            {"x": 2016, "value": 200, "drillDown": [
+                {"x": "Q1", "value": 51},
+                {"x": "Q2", "value": 10},
+                {"x": "Q3", "value": 35},
+                {"x": "Q4", "value": 42}
+            ]},
+            {"x": 2017, "value": 200, "drillDown": [
+                {"x": "Q1", "value": 52},
+                {"x": "Q2", "value": 20},
+                {"x": "Q3", "value": 65},
+                {"x": "Q4", "value": 02}
+            ]}
+        ];
+
+        function createChart(new_data) {
+            var dataSet = anychart.data.set(new_data);
+            // create a chart and set the data
+            chart = anychart.pie(dataSet);
+            chart.radius(100);
+            // set the container id
+            chart.container("container");
+            // initiate drawing the chart
+            chart.draw();  
+            // enable aqua style
+            chart.fill("aquastyle");
+            updateChart(chart);
+        }
+
+        function removeChart(new_data) {
+            chart.dispose();
+            chart = null;
+            // $("#container div").html('');
+            // console.log(new_data)
+            createChart(new_data);
+        }
+
+        function updateChart(chart) {
+            // when a 'pointClick' event happens
+            chart.listen('pointClick', function (e) {
+                // check if there is drillDown data available
+                let index = e.point.index;
+                if (e.point.get('drillDown')) {
+                    removeChart(data[index].drillDown);
+                }
+                else {
+                    removeChart(data);
+                }
+            });
+        }
+        
+        createChart(data);
+
+    </script>
+</body>
+</html>
