@@ -22,33 +22,25 @@ var data = [
 
 function createChart(new_data) {
     var dataSet = anychart.data.set(new_data);
-    // create a chart and set the data
     chart = anychart.pie(dataSet);
     chart.radius(100);
-    // set the container id
     chart.container("container");
-    // initiate drawing the chart
     chart.draw();  
-    // enable aqua style
     chart.fill("aquastyle");
-    updateChart(chart);
+    updateChart();
 }
 
 function removeChart(new_data) {
     chart.dispose();
     chart = null;
-    // $("#container div").html('');
-    // console.log(new_data)
     createChart(new_data);
 }
 
-function updateChart(chart) {
-    // when a 'pointClick' event happens
+function updateChart() {
     chart.listen('pointClick', function (e) {
-        // check if there is drillDown data available
-        let index = e.point.index;
-        if (e.point.get('drillDown')) {
-            removeChart(data[index].drillDown);
+        let point = e.point;
+        if (point.get('drillDown')) {
+            removeChart(data[point.index].drillDown);
         }
         else {
             removeChart(data);
